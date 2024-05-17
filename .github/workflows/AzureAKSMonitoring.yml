@@ -24,12 +24,13 @@ jobs:
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
   
-      - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v2.0.2
-        with:
-          terraform_version: latest
-          cli_config_credentials_token: ${{ secrets.TFC_TOKEN_ID }}
-
+      - name: Configure Terraform
+        id : terraform-config
+        run: |
+          curl -fsSL https://apt.releases.hashicorp.com/gpg | sudo gpg --dearmor -o /usr/share/keyrings/hashicorp.gpg
+          echo "deb [arch=amd64 signed-by=/usr/share/keyrings/hashicorp.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/hashicorp.list > /dev/null
+          sudo apt-get update && sudo apt-get install terraform
+  
       - name: Terraform Init
         id: init
         run: terraform init
