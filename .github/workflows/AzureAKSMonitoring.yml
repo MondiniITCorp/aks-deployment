@@ -1,5 +1,6 @@
 name: Azure AKS Monitroring With Prometheus and Grafana
 on:
+  push:
   workflow_dispatch:
 
 permissions:
